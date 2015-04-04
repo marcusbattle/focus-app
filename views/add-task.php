@@ -6,7 +6,7 @@
 			<input type="hidden" name="action" value="submit_task_form" />
 			<div class="field">
 				<label>Task</label>
-				<textarea name="task"></textarea>
+				<textarea name="task" autocomplete="off" autocorrect="off"></textarea>
 			</div>
 			<div class="field">
 				<label>Project</label>
