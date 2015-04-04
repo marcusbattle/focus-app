@@ -33,5 +33,6 @@
 				<button type="submit">Add Task</button>
 			</div>
 		</form>
+		<a href="#" class="close">Close</a>
 	</div>
 </div>

@@ -30,11 +30,15 @@ jQuery(document).ready(function($){
 				alert( response.message );
 				
 				location.reload();
-				
+
 			});
 
 		}
 
+	});
+
+	$('#add-task-view .close').on('click', function(){
+		$('#add-task-view').addClass('hide');
 	});
 
 	function validate_form() {
