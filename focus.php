@@ -17,6 +17,8 @@ class FOCUS_App {
 		add_action( 'init', array( $this, 'create_taxonomies' ), 0 );
 		add_action( 'wp_footer', array( $this, 'create_add_task_view' ) );	
 
+		add_action( 'pre_get_posts', array( $this, 'sort_tasks_by_due_date' ) );
+
 		// Ajax
 		add_action( 'wp_ajax_submit_task_form', array( $this, 'submit_task_form' ) );
 	}
@@ -154,6 +156,23 @@ class FOCUS_App {
 			exit;
 
 		}
+
+	}
+
+	/**
+	 * Makes sure the tasks sort in ASC order by due date
+	 */
+	public function sort_tasks_by_due_date( $query ) {
+
+		if ( is_post_type_archive('task') && $query->is_main_query() ) {
+			
+			$query->set('posts_per_page', 20 );
+			$query->set('meta_key', 'due_date');
+			$query->set('orderby', array( 'meta_value_num' => 'ASC' ) );
+
+		}
+
+		return $query;
 
 	}
 
