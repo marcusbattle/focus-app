@@ -21,6 +21,10 @@ class FOCUS_App {
 
 		// Ajax
 		add_action( 'wp_ajax_submit_task_form', array( $this, 'submit_task_form' ) );
+		add_action( 'wp_ajax_complete_task', array( $this, 'complete_task' ) );
+		add_action( 'wp_ajax_delete_task', array( $this, 'delete_task' ) );
+		add_action( 'wp_ajax_add_note', array( $this, 'add_note' ) );
+
 	}
 
 	public function scripts_and_styles() {
@@ -173,6 +177,106 @@ class FOCUS_App {
 		}
 
 		return $query;
+
+	}
+
+	public function complete_task() {
+
+		if ( ! empty( $_POST ) && isset( $_POST['action'] ) && ( $_POST['action'] == 'complete_task' ) ) {
+			
+			$task_id = isset( $_POST['task_id'] ) ? $_POST['task_id'] : 0;
+
+			if ( ! $task_id ) {
+				// Report error message
+				echo json_encode( array( 'success' => false ) );
+				exit;
+			}
+			
+			update_post_meta( $task_id, 'status', 'complete' );
+			
+			echo json_encode( array( 
+				'success' => true
+			) );
+
+			exit;
+
+		}
+
+	}
+
+	public function delete_task() {
+
+		if ( ! empty( $_POST ) && isset( $_POST['action'] ) && ( $_POST['action'] == 'delete_task' ) ) {
+			
+			$task_id = isset( $_POST['task_id'] ) ? $_POST['task_id'] : 0;
+
+			if ( ! $task_id ) {
+				// Report error message
+			}
+
+			$task_deleted = wp_delete_post( $task_id ); 
+
+			if ( $task_deleted ) {
+				
+				echo json_encode( array( 
+					'success' => true
+				) );
+
+			}
+
+			exit;
+
+		}
+
+	}
+
+	public function add_note() {
+
+		if ( ! empty( $_POST ) && isset( $_POST['action'] ) && ( $_POST['action'] == 'add_note' ) ) {
+			
+			$task_id = isset( $_POST['task_id'] ) ? $_POST['task_id'] : 0;
+			$new_note = isset( $_POST['new_note'] ) ? $_POST['new_note'] : '';
+
+			if ( ! $task_id || ! $new_note ) {
+				// Report error message
+				echo json_encode( array( 
+					'success' => false
+				) );
+				
+				exit;
+
+			}
+
+			$current_user = wp_get_current_user();
+
+			$time = current_time('mysql');
+
+			$data = array(
+			    'comment_post_ID' => $task_id,
+			    'comment_author' => $current_user->display_name,
+			    'comment_author_email' => $current_user->user_email,
+			    'comment_author_url' => 'http://',
+			    'comment_content' => $new_note,
+			    'comment_type' => '',
+			    'comment_parent' => 0,
+			    'user_id' => $current_user->ID,
+			    'comment_date' => $time,
+			    'comment_approved' => 1,
+			);
+
+			$note_inserted = wp_insert_comment($data);
+
+			if ( ! is_wp_error( $note_inserted ) ) {
+
+				echo json_encode( array( 
+					'success' => true
+				) );
+
+			}
+
+			exit;
+
+		}
 
 	}
 

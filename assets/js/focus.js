@@ -62,4 +62,87 @@ jQuery(document).ready(function($){
 
 	}
 
+	$(document).on('click', '.task', function(){
+
+		$('.task.selected').removeClass('selected');
+		$( this ).addClass('selected');
+
+	});
+
+
+	$(document).on('click', '.task .actions .delete', function(){
+
+		var task = $(this).closest('.task');
+		var task_id = $(task).data('task-id');
+
+		$(task).fadeOut();
+
+		request = $.ajax({
+			url: focus.ajax_url,
+			type: "POST",
+			data: {
+				task_id : task_id,
+				action : 'delete_task'
+			},
+			dataType: "JSON"
+		});
+
+		request.done( function( response ) {
+			
+		});
+
+	});
+
+	$(document).on('click', '.task .actions .complete', function(){
+
+		var task = $(this).closest('.task');
+		var task_id = $(task).data('task-id');
+
+		$(task).addClass('complete');
+		
+		request = $.ajax({
+			url: focus.ajax_url,
+			type: "POST",
+			data: {
+				task_id : task_id,
+				action : 'complete_task'
+			},
+			dataType: "JSON"
+		});
+
+		request.done( function( response ) {
+			
+		});
+
+	});
+
+	$(document).on('click', '.add-note-button', function(){
+
+		var task = $(this).closest('.task');
+		var task_id = $(task).data('task-id');
+		var new_note = $(task).find('textarea.new-note').val();
+
+		request = $.ajax({
+			url: focus.ajax_url,
+			type: "POST",
+			data: {
+				task_id : task_id,
+				action : 'add_note',
+				new_note : new_note
+			},
+			dataType: "JSON"
+		});
+
+		request.done( function( response ) {
+			
+			if ( response.success ) {
+
+				location.reload();
+				
+			}
+
+		});
+
+	});
+
 });
