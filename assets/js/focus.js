@@ -99,7 +99,7 @@ jQuery(document).ready(function($){
 		var task_id = $(task).data('task-id');
 
 		$(task).addClass('complete');
-		
+
 		request = $.ajax({
 			url: focus.ajax_url,
 			type: "POST",

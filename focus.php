@@ -193,9 +193,10 @@ class FOCUS_App {
 			}
 			
 			update_post_meta( $task_id, 'status', 'complete' );
-			
+
 			echo json_encode( array( 
-				'success' => true
+				'success' => true,
+				'status' => $task_status
 			) );
 
 			exit;
