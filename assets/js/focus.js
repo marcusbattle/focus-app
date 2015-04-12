@@ -62,13 +62,37 @@ jQuery(document).ready(function($){
 
 	}
 
-	$(document).on('click', '.task', function(){
+	$(document).on('click', '.task', function( click ) {
 
-		$('.task.selected').removeClass('selected');
-		$( this ).addClass('selected');
+		click.stopPropagation();
 
+		var task = $(this).closest('.task');
+		var target = $( click.target );
+
+
+		if ( $(target).hasClass('close-task') ) {
+
+			$(task).removeClass('selected');
+
+		} else {
+
+			if ( $(task).hasClass('selected') ) {
+
+				// $(task).removeClass('selected');
+
+			} else {
+
+				$('.task.selected').removeClass( 'selected' );
+				$( this ).addClass('selected');
+
+			}
+
+		}
+	
+		console.log( target );
+
+	
 	});
-
 
 	$(document).on('click', '.task .actions .delete', function(){
 
@@ -98,7 +122,7 @@ jQuery(document).ready(function($){
 		var task = $(this).closest('.task');
 		var task_id = $(task).data('task-id');
 
-		$(task).addClass('complete');
+		
 
 		request = $.ajax({
 			url: focus.ajax_url,
@@ -112,6 +136,8 @@ jQuery(document).ready(function($){
 
 		request.done( function( response ) {
 			
+			$(task).removeClass('complete');
+			$(task).addClass( response.status );
 		});
 
 	});

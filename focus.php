@@ -192,7 +192,15 @@ class FOCUS_App {
 				exit;
 			}
 			
-			update_post_meta( $task_id, 'status', 'complete' );
+			$task_status = get_post_meta( $task_id, 'status', true );
+
+			if ( $task_status ) {
+				update_post_meta( $task_id, 'status', '' );
+			} else {
+				update_post_meta( $task_id, 'status', 'complete' );
+			}
+
+			$task_status = get_post_meta( $task_id, 'status', true );
 
 			echo json_encode( array( 
 				'success' => true,
