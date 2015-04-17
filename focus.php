@@ -170,7 +170,7 @@ class FOCUS_App {
 
 		if ( is_post_type_archive('task') && $query->is_main_query() ) {
 			
-			$query->set('posts_per_page', 20 );
+			$query->set('posts_per_page', -1 );
 			$query->set('meta_key', 'due_date');
 			$query->set('orderby', array( 'meta_value_num' => 'ASC' ) );
 
